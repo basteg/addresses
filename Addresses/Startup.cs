@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Addresses.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Addresses
 {
@@ -28,6 +30,8 @@ namespace Addresses
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AddressesContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
         }
 
