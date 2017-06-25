@@ -1,32 +1,36 @@
-﻿@model IEnumerable<Addresses.Models.Address>
+﻿@using Addresses.Models
+
+@model IndexViewModel
+
+@addTagHelper "*, Addresses"
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Список адресов";
 }
 
 <div style="text-align:center">
     <table class="table text-center">
         <tr style="vertical-align:middle;text-align:center">
             <th>
-                Страна
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CountrySort">Страна</sort-header>
             </th>
             <th>
-                Город
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CitySort">Город</sort-header>
             </th>
             <th>
-                Улица
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.StreetSort">Улица</sort-header>
             </th>
             <th>
-                Дом
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.HouseNumberSort">Номер дома</sort-header>
             </th>
             <th>
-                Идекс
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.ZipCodeSort">Идекс</sort-header>
             </th>
             <th>
-                Время создания
+                <sort-header action="Index" up="@Model.SortViewModel.Up" current="@Model.SortViewModel.Current" property="@Model.SortViewModel.CreationDateTimeSort">Время создания</sort-header>
             </th>
         </tr>
-        @foreach (var address in Model)
+        @foreach (var address in Model.Addresses)
         { 
         <tr>
             <td>@address.Country</td>

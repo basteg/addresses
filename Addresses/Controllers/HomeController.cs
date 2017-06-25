@@ -21,17 +21,17 @@ namespace Addresses.Controllers
             db = context;
         }
 
-        public async Task<IActionResult> Index(SortState sortOrder = SortState.NoSort)
+        public async Task<IActionResult> Index(SortState sortState = SortState.NoSort)
         {
             IQueryable<Address> addresses = db.Addresses.Take(rowPerPage);
-            ViewData["CountrySort"] = sortOrder == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
-            ViewData["CitySort"] = sortOrder == SortState.CityAsc ? SortState.CityDesc : SortState.CityAsc;
-            ViewData["StreetSort"] = sortOrder == SortState.StreetAsc ? SortState.StreetDesc : SortState.StreetAsc;
-            ViewData["HouseNumberSort"] = sortOrder == SortState.HouseNumberAsc ? SortState.HouseNumberDesc : SortState.HouseNumberAsc;
-            ViewData["ZipCodeSort"] = sortOrder == SortState.ZipCodeAsc ? SortState.ZipCodeDesc : SortState.ZipCodeAsc;
-            ViewData["CreationDateTime"] = sortOrder == SortState.CreationDateTimeAsc ? SortState.CreationDateTimeDesc : SortState.CreationDateTimeAsc;
+            //ViewData["CountrySort"] = sortState == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
+            //ViewData["CitySort"] = sortState == SortState.CityAsc ? SortState.CityDesc : SortState.CityAsc;
+            //ViewData["StreetSort"] = sortState == SortState.StreetAsc ? SortState.StreetDesc : SortState.StreetAsc;
+            //ViewData["HouseNumberSort"] = sortState == SortState.HouseNumberAsc ? SortState.HouseNumberDesc : SortState.HouseNumberAsc;
+            //ViewData["ZipCodeSort"] = sortState == SortState.ZipCodeAsc ? SortState.ZipCodeDesc : SortState.ZipCodeAsc;
+            //ViewData["CreationDateTime"] = sortState == SortState.CreationDateTimeAsc ? SortState.CreationDateTimeDesc : SortState.CreationDateTimeAsc;
 
-            switch (sortOrder)
+            switch (sortState)
             {
                 case SortState.CountryAsc:
                     addresses = addresses.OrderBy(s => s.Country);
@@ -74,7 +74,12 @@ namespace Addresses.Controllers
                     break;
             }
 
-                    return View(await addresses.AsNoTracking().ToListAsync());
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                Addresses = await addresses.AsNoTracking().ToListAsync(),
+                SortViewModel = new SortViewModel(sortState)
+            };
+                    return View(viewModel);
         }
         //{
         //    var data = await db.Addresses.Take(rowPerPage).ToListAsync();
@@ -88,23 +93,6 @@ namespace Addresses.Controllers
         //    return View(data);
         //}
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
-        }
+        
     }
 }
