@@ -9,6 +9,24 @@
 }
 
 <div style="text-align:center">
+    <form method="get">
+        <div class="form-inline form-group">
+            <table>
+                <tr>
+                    <td>@Html.TextBox("countryFilter", Model.Country, htmlAttributes: new { @class ="form-control"})</td>
+                    <td>@Html.TextBox("cityFilter", Model.City, htmlAttributes: new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("streetFilter", Model.Street, htmlAttributes: new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("houseNumberFilter", Model.HouseNumber, htmlAttributes: new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("zipCodeFilter", Model.ZipCode, htmlAttributes: new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("creationDateTimeFilter", Model.CreationDateTime, htmlAttributes: new { @class = "form-control" })</td>
+                    
+                        
+                    
+                </tr>
+            </table>
+            <input type="submit" value="Фильтр" class="btn btn-default" @*style="visibility:hidden"*@ />
+        </div>
+    </form>
     <table class="table text-center">
         <tr style="vertical-align:middle;text-align:center">
             <th>
@@ -31,15 +49,16 @@
             </th>
         </tr>
         @foreach (var address in Model.Addresses)
-        { 
-        <tr>
-            <td>@address.Country</td>
-            <td>@address.City</td>
-            <td>@address.Street</td>
-            <td>@address.HouseNumber</td>
-            <td>@address.ZipCode</td>
-            <td>@address.CreationDateTime</td>
-        </tr>
+        {
+            <tr>
+                <td>@address.Country</td>
+                <td>@address.City</td>
+                <td>@address.Street</td>
+                <td>@address.HouseNumber</td>
+                <td>@address.ZipCode</td>
+                <td>@address.CreationDateTime</td>
+            </tr>
         }
     </table>
+
 </div>

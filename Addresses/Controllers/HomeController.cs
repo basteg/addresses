@@ -21,15 +21,40 @@ namespace Addresses.Controllers
             db = context;
         }
 
-        public async Task<IActionResult> Index(SortState sortState = SortState.NoSort)
+        public async Task<IActionResult> Index(string countryFilter, string cityFilter, string streetFilter, 
+            int? houseNumberFilter, int? zipCodeFilter, DateTime? creationDataTimeFilter, SortState sortState = SortState.NoSort)
         {
             IQueryable<Address> addresses = db.Addresses.Take(rowPerPage);
-            //ViewData["CountrySort"] = sortState == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
-            //ViewData["CitySort"] = sortState == SortState.CityAsc ? SortState.CityDesc : SortState.CityAsc;
-            //ViewData["StreetSort"] = sortState == SortState.StreetAsc ? SortState.StreetDesc : SortState.StreetAsc;
-            //ViewData["HouseNumberSort"] = sortState == SortState.HouseNumberAsc ? SortState.HouseNumberDesc : SortState.HouseNumberAsc;
-            //ViewData["ZipCodeSort"] = sortState == SortState.ZipCodeAsc ? SortState.ZipCodeDesc : SortState.ZipCodeAsc;
-            //ViewData["CreationDateTime"] = sortState == SortState.CreationDateTimeAsc ? SortState.CreationDateTimeDesc : SortState.CreationDateTimeAsc;
+            ViewData["CountrySort"] = sortState == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
+            ViewData["CitySort"] = sortState == SortState.CityAsc ? SortState.CityDesc : SortState.CityAsc;
+            ViewData["StreetSort"] = sortState == SortState.StreetAsc ? SortState.StreetDesc : SortState.StreetAsc;
+            ViewData["HouseNumberSort"] = sortState == SortState.HouseNumberAsc ? SortState.HouseNumberDesc : SortState.HouseNumberAsc;
+            ViewData["ZipCodeSort"] = sortState == SortState.ZipCodeAsc ? SortState.ZipCodeDesc : SortState.ZipCodeAsc;
+            ViewData["CreationDateTime"] = sortState == SortState.CreationDateTimeAsc ? SortState.CreationDateTimeDesc : SortState.CreationDateTimeAsc;
+            if (!String.IsNullOrEmpty(countryFilter))
+            {
+                addresses = addresses.Where(p => p.Country.StartsWith(countryFilter));
+            }
+            //if (!String.IsNullOrEmpty(cityFilter))
+            //{
+            //    addresses = addresses.Where(p => p.City.StartsWith(cityFilter));
+            //}
+            //if (!String.IsNullOrEmpty(streetFilter))
+            //{
+            //    addresses = addresses.Where(p => p.Street.StartsWith(streetFilter));
+            //}
+            //if (houseNumberFilter!=null)
+            //{
+            //    addresses = addresses.Where(p => p.HouseNumber.ToString().StartsWith(houseNumberFilter.ToString()));
+            //}
+            if (zipCodeFilter != null)
+            {
+                addresses = addresses.Where(p => ((int)p.ZipCode).ToString().StartsWith(zipCodeFilter.ToString()));
+            }
+            //if(creationDataTimeFilter!=null)
+            //{
+            //    addresses = addresses.Where(p => p.CreationDateTime.ToString().StartsWith(creationDataTimeFilter.ToString()));
+            //}
 
             switch (sortState)
             {
@@ -73,11 +98,13 @@ namespace Addresses.Controllers
                     addresses = addresses.OrderBy(s => s.Id);
                     break;
             }
+            
 
             IndexViewModel viewModel = new IndexViewModel
             {
                 Addresses = await addresses.AsNoTracking().ToListAsync(),
                 SortViewModel = new SortViewModel(sortState)
+                
             };
                     return View(viewModel);
         }
