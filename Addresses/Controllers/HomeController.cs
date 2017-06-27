@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Addresses.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
 
 namespace Addresses.Controllers
 {
@@ -115,6 +117,17 @@ namespace Addresses.Controllers
             };
                     return View(viewModel);
         }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+            return LocalRedirect(returnUrl);
+                }
+        
         //{
         //    var data = await db.Addresses.Take(rowPerPage).ToListAsync();
         //    return View(data);

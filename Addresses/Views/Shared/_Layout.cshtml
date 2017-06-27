@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     @Html.Raw(JavaScriptSnippet.FullScript)
+   
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -40,6 +41,9 @@
         </div>
     </nav>
     <div class="container body-content">
+        <div>
+            @await Html.PartialAsync("_SelectLanguagePartial")
+        </div>
         @RenderBody()
         <hr />
         <footer>
