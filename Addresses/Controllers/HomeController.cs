@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using PagedList.Core;
 using PagedList;
+using System.Globalization;
 
 namespace Addresses.Controllers
 {
@@ -24,7 +25,7 @@ namespace Addresses.Controllers
         }
 
         public async Task<IActionResult> Index(string countryFilter, string cityFilter, string streetFilter, 
-            int? houseNumberFilter, int? zipCodeFilter, object creationDataTimeFilter, SortState sortState = SortState.NoSort, int page=1)
+            string houseNumberFilter, string zipCodeFilter, string creationDataTimeFilter, SortState sortState = SortState.NoSort, int page=1)
         {
             int pageSize = 10;
             IQueryable<Address> addresses = db.Addresses;
@@ -41,18 +42,42 @@ namespace Addresses.Controllers
             {
                 addresses = addresses.Where(p => p.Street.StartsWith(streetFilter));
             }
-            if (houseNumberFilter != null)
+            if (!String.IsNullOrWhiteSpace(houseNumberFilter))
             {
-                //addresses = addresses.Where(p => p.HouseNumber.ToString().StartsWith(houseNumberFilter.ToString()));
-                addresses = addresses.Where(p => p.HouseNumber.Equals(houseNumberFilter));
+                if (houseNumberFilter.Contains("-"))
+                {
+                    var range = houseNumberFilter.Split('-');
+                    var start = int.Parse(range[0]);
+                    var end = int.Parse(range[1]);
+
+                    addresses = addresses.Where(p => p.HouseNumber >= start &&
+                                                     p.HouseNumber <= end);
+                }
+                else
+                    addresses = addresses.Where(p => p.ZipCode == int.Parse(houseNumberFilter));
             }
-            if (zipCodeFilter != null)
+            if (!String.IsNullOrWhiteSpace(zipCodeFilter))
             {
-                addresses = addresses.Where(p => ((int)p.ZipCode).ToString().StartsWith(zipCodeFilter.ToString()));
+                if (zipCodeFilter.Contains("-"))
+                {
+                    var range = zipCodeFilter.Split('-');
+                    var start = int.Parse(range[0]);
+                    var end = int.Parse(range[1]);
+
+                    addresses = addresses.Where(p => p.ZipCode >= start &&
+                                                     p.ZipCode <= end);
+                }
+                else
+                    addresses = addresses.Where(p => p.ZipCode == int.Parse(zipCodeFilter));
             }
-            if (creationDataTimeFilter != null)
+            if (!string.IsNullOrWhiteSpace(creationDataTimeFilter))
             {
-                //addresses = addresses.Where(p => p.CreationDateTime.ToString().StartsWith(creationDataTimeFilter.ToString()));
+                var dates = creationDataTimeFilter.Split('-');
+                var startDate = DateTime.Parse(dates[0], CultureInfo.CurrentCulture);
+                var endDate = DateTime.Parse(dates[1], CultureInfo.CurrentCulture);
+
+                addresses = addresses.Where(p => p.CreationDateTime >= startDate &&
+                                                 p.CreationDateTime <= endDate);
             }
 
             ViewData["CountrySort"] = sortState == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
@@ -114,7 +139,7 @@ namespace Addresses.Controllers
             IndexViewModel viewModel = new IndexViewModel
             {
                 PageViewModel = new PageViewModel(count, page, pageSize),
-                FilterViewModel = new FilterViewModel(countryFilter, cityFilter, streetFilter, houseNumberFilter, zipCodeFilter, DateTime.Now), //creationDataTimeFilter),
+                FilterViewModel = new FilterViewModel(countryFilter, cityFilter, streetFilter, houseNumberFilter, zipCodeFilter, creationDataTimeFilter),
                 SortViewModel = new SortViewModel(sortState),
                 Addresses = items,
                 NoFilterViewModel=new NoFilterViewModel(null, null, null, null, null, null)

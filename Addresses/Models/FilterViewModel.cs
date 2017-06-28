@@ -8,7 +8,7 @@ namespace Addresses.Models
     public class FilterViewModel
     {
         public FilterViewModel(string countryFilter, string cityFilter, string streetFilter,
-            int? houseNumberFilter, int? zipCodeFilter, DateTime? creationDataTimeFilter)
+            string houseNumberFilter, string zipCodeFilter, string creationDataTimeFilter)
         {
             SelectedCountry = countryFilter;
             SelectedCity = cityFilter;
@@ -31,9 +31,9 @@ namespace Addresses.Models
         public string SelectedCountry{get;set;}
         public string SelectedCity { get; set; }
         public string SelectedStreet { get; set; }
-        public int? SelectedHouseNumber { get; set; }
-        public int? SelectedZipCode { get; set; }
-        public DateTime? SelectedCreationDateTime { get; set; }
+        public string SelectedHouseNumber { get; set; }
+        public string SelectedZipCode { get; set; }
+        public string SelectedCreationDateTime { get; set; }
 
         public string StyleTextCountry { get; set; }
         public string StyleTextCity { get; set; }

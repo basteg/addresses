@@ -8,7 +8,7 @@ namespace Addresses.Models
     public class NoFilterViewModel
     {
         public NoFilterViewModel(string countryNoFilter, string cityNoFilter, string streetNoFilter,
-            int? houseNumberNoFilter, int? zipCodeNoFilter, DateTime? creationDataTimeNoFilter)
+            string houseNumberNoFilter, string zipCodeNoFilter, string creationDataTimeNoFilter)
         {
             SelectedCountry = countryNoFilter;
             SelectedCity = cityNoFilter;
@@ -21,9 +21,9 @@ namespace Addresses.Models
         public string SelectedCountry { get; set; }
         public string SelectedCity { get; set; }
         public string SelectedStreet { get; set; }
-        public int? SelectedHouseNumber { get; set; }
-        public int? SelectedZipCode { get; set; }
-        public DateTime? SelectedCreationDateTime { get; set; }
+        public string SelectedHouseNumber { get; set; }
+        public string SelectedZipCode { get; set; }
+        public string SelectedCreationDateTime { get; set; }
     }
 
 }
