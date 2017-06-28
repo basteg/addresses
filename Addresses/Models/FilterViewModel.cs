@@ -16,6 +16,16 @@ namespace Addresses.Models
             SelectedHouseNumber = houseNumberFilter;
             SelectedZipCode = zipCodeFilter;
             SelectedCreationDateTime = creationDataTimeFilter;
+
+            string textStyle = "color:black";
+            StyleTextCountry = textStyle;
+            StyleTextCity = textStyle;
+            StyleTextStreet = textStyle;
+            StyleTextHouseNumber = textStyle;
+            StyleTextZipCode = textStyle;
+            StyleTextCreationDateTime = textStyle;
+            
+
         }
 
         public string SelectedCountry{get;set;}
@@ -24,5 +34,13 @@ namespace Addresses.Models
         public int? SelectedHouseNumber { get; set; }
         public int? SelectedZipCode { get; set; }
         public DateTime? SelectedCreationDateTime { get; set; }
+
+        public string StyleTextCountry { get; set; }
+        public string StyleTextCity { get; set; }
+        public string StyleTextStreet { get; set; }
+        public string StyleTextHouseNumber { get; set; }
+        public string StyleTextZipCode { get; set; }
+        public string StyleTextCreationDateTime { get; set; }
+
     }
 }

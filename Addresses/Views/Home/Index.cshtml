@@ -1,5 +1,8 @@
 ﻿@using Addresses.Models
 @using Microsoft.AspNetCore.Mvc.Localization
+@using PagedList.Core
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @inject IViewLocalizer Localizer
 
@@ -41,19 +44,20 @@
                     <td>@Html.TextBox("streetFilter", Model.FilterViewModel.SelectedStreet, htmlAttributes: new { @class = "form-control" })</td>
                     <td>@Html.TextBox("houseNumberFilter", Model.FilterViewModel.SelectedHouseNumber, htmlAttributes: new { @class = "form-control" })</td>
                     <td>@Html.TextBox("zipCodeFilter", Model.FilterViewModel.SelectedZipCode, htmlAttributes: new { @class = "form-control" })</td>
-                    <td>@Html.TextBox("creationDateTimeFilter", Model.FilterViewModel.SelectedCreationDateTime, htmlAttributes: new { @class = "form-control" })</td>
+                    <td><input type="text" name="creationDataTimeFilter" value="01/01/2015 - 01/31/2015" /></td>
+                    @*<td>@await Html.PartialAsync("_DateRangePartial"), htmlAttributes: new { @class() = "form-control" })</td>*@
                 </tr>
 
-       
+
         @foreach (var address in Model.Addresses)
         {
             <tr>
-                <td>@address.Country</td>
-                <td>@address.City</td>
-                <td>@address.Street</td>
-                <td>@address.HouseNumber</td>
-                <td>@address.ZipCode</td>
-                <td>@address.CreationDateTime</td>
+                <td><p style=@Model.FilterViewModel.StyleTextCountry> @address.Country</p></td>
+                <td><p style=@Model.FilterViewModel.StyleTextCity>@address.City</p></td>
+                <td><p style=@Model.FilterViewModel.StyleTextStreet>@address.Street</p></td>
+                <td><p style=@Model.FilterViewModel.StyleTextHouseNumber>@address.HouseNumber</p></td>
+                <td><p style=@Model.FilterViewModel.StyleTextZipCode>@address.ZipCode</p></td>
+                <td><p style=@Model.FilterViewModel.StyleTextCreationDateTime>@address.CreationDateTime</p></td>
             </tr>
         }
     </table>
@@ -61,7 +65,7 @@
             </div>
 </form>
 </div>
-@if (Model.PageViewModel.HasPreviousPage)
+@*@if (Model.PageViewModel.HasPreviousPage)
 {
     <a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
@@ -92,7 +96,7 @@
        Вперед
         <i class="glyphicon glyphicon-chevron-right"></i>
     </a>
-}
+}*@
 <a a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber=1)"
        asp-route-countryFilter="@(Model.NoFilterViewModel.SelectedCountry)"
@@ -106,3 +110,12 @@
        @Localizer["Refresh"]
         <i class="glyphicon glyphicon-refresh"></i>
     </a>
+    @*Страница @(Model.PageViewModel.PageCount < Model.PageViewModel.PageNumber ? 0 : Model.PageViewModel.PageNumber) из @Model.PageViewModel.PageCount
+
+    <pager class="pager-container" list="@Model.Addresses" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index" asp-controller="Home" asp-route-keyword="azaza" />*@
+
+<script type="text/javascript">
+$(function() {
+    $('input[name="creationDataTimeFilter"]').daterangepicker();
+});
+</script>

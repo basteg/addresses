@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,10 +33,13 @@ namespace Addresses
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AddressesContext>(options => options.UseSqlServer(connection));
 
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddLocalization(options => options.ResourcesPath ="Resources");
             services.AddMvc()
-                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -44,7 +48,7 @@ namespace Addresses
                     new CultureInfo("ru")
                 };
 
-                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("ru");
+                options.DefaultRequestCulture = new RequestCulture("ru");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
             });

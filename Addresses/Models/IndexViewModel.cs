@@ -12,6 +12,7 @@ namespace Addresses.Models
         public FilterViewModel FilterViewModel { get; set; }
         public SortViewModel SortViewModel { get; set; }
         public NoFilterViewModel NoFilterViewModel { get; set; }
+        
 
          
     }

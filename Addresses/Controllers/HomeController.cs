@@ -7,6 +7,8 @@ using Addresses.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
+using PagedList.Core;
+using PagedList;
 
 namespace Addresses.Controllers
 {
@@ -22,7 +24,7 @@ namespace Addresses.Controllers
         }
 
         public async Task<IActionResult> Index(string countryFilter, string cityFilter, string streetFilter, 
-            int? houseNumberFilter, int? zipCodeFilter, DateTime? creationDataTimeFilter, SortState sortState = SortState.NoSort, int page=1)
+            int? houseNumberFilter, int? zipCodeFilter, object creationDataTimeFilter, SortState sortState = SortState.NoSort, int page=1)
         {
             int pageSize = 10;
             IQueryable<Address> addresses = db.Addresses;
@@ -50,7 +52,7 @@ namespace Addresses.Controllers
             }
             if (creationDataTimeFilter != null)
             {
-                addresses = addresses.Where(p => p.CreationDateTime.ToString().StartsWith(creationDataTimeFilter.ToString()));
+                //addresses = addresses.Where(p => p.CreationDateTime.ToString().StartsWith(creationDataTimeFilter.ToString()));
             }
 
             ViewData["CountrySort"] = sortState == SortState.CountryAsc ? SortState.CountryDesc : SortState.CountryAsc;
@@ -102,20 +104,53 @@ namespace Addresses.Controllers
                     addresses = addresses.OrderBy(s => s.Id);
                     break;
             }
-
             var count = await addresses.CountAsync();
+            //var items =  addresses.ToPagedList(page, pageSize);
+
             var items = await addresses.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            //return View(phones.ToPagedList(pageNumber, pageSize));
 
 
             IndexViewModel viewModel = new IndexViewModel
             {
                 PageViewModel = new PageViewModel(count, page, pageSize),
+                FilterViewModel = new FilterViewModel(countryFilter, cityFilter, streetFilter, houseNumberFilter, zipCodeFilter, DateTime.Now), //creationDataTimeFilter),
                 SortViewModel = new SortViewModel(sortState),
-                FilterViewModel = new FilterViewModel(countryFilter, cityFilter, streetFilter, houseNumberFilter, zipCodeFilter, creationDataTimeFilter),
                 Addresses = items,
                 NoFilterViewModel=new NoFilterViewModel(null, null, null, null, null, null)
             };
-                    return View(viewModel);
+          
+            if(viewModel.FilterViewModel.SelectedCountry != null || viewModel.SortViewModel.Current == SortState.CountryAsc
+                || viewModel.SortViewModel.Current == SortState.CountryDesc)
+                {
+                viewModel.FilterViewModel.StyleTextCountry = "color:blue";
+            }
+            if(viewModel.FilterViewModel.SelectedCity != null || viewModel.SortViewModel.Current == SortState.CityAsc
+                || viewModel.SortViewModel.Current == SortState.CityDesc)
+                {
+                viewModel.FilterViewModel.StyleTextCity = "color:blue";
+            }
+          if(viewModel.FilterViewModel.SelectedStreet != null || viewModel.SortViewModel.Current == SortState.StreetAsc
+                || viewModel.SortViewModel.Current == SortState.StreetDesc)
+                {
+                viewModel.FilterViewModel.StyleTextStreet = "color:blue";
+            }
+            if(viewModel.FilterViewModel.SelectedHouseNumber != null || viewModel.SortViewModel.Current == SortState.HouseNumberAsc
+                || viewModel.SortViewModel.Current == SortState.HouseNumberDesc)
+                {
+                viewModel.FilterViewModel.StyleTextHouseNumber = "color:blue";
+            }
+            if(viewModel.FilterViewModel.SelectedZipCode != null||viewModel.SortViewModel.Current==SortState.ZipCodeAsc
+                ||viewModel.SortViewModel.Current==SortState.ZipCodeDesc)
+                {
+                viewModel.FilterViewModel.StyleTextZipCode = "color:blue";
+            }
+            if(viewModel.FilterViewModel.SelectedCreationDateTime != null || viewModel.SortViewModel.Current == SortState.CreationDateTimeAsc
+                || viewModel.SortViewModel.Current == SortState.CreationDateTimeDesc)
+                {
+                viewModel.FilterViewModel.StyleTextCreationDateTime = "color:blue";
+            }
+            return View(viewModel);
         }
 
         [HttpPost]

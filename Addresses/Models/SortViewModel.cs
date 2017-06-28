@@ -17,7 +17,7 @@ namespace Addresses.Models
         public SortState NoSort { get; set; }
         public SortState Current { get; set; }
         public bool Up { get; set; }
-        
+
 
         public SortViewModel(SortState sortState)
         {
