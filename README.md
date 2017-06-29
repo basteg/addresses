@@ -22,7 +22,7 @@
 4. В файле "appsettings.json" необходимо изменить строку подключения **ConnectionStrings** по умолчанию **DefaultConnection** к базе данныхб вписав свой сервер:
 ```json
  "ConnectionStrings": {
-    "DefaultConnection": "Data Source={YUR_SQL_SERVER};.."
+    "DefaultConnection": "Data Source={YOUR_SQL_SERVER};.."
 },
 ```
 5. Запустить проект на вполнение с помощью клавиши F5
