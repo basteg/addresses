@@ -67,6 +67,8 @@ namespace Addresses
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages("text/plain", "Error : {0}");
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 

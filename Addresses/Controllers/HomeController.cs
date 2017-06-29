@@ -226,5 +226,10 @@ namespace Addresses.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }
