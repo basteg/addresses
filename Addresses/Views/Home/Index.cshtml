@@ -1,7 +1,8 @@
 ﻿@using Addresses.Models
 @using Microsoft.AspNetCore.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@using PagedList.Core
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -14,6 +15,10 @@
 @{
     ViewData["Title"] = "Список адресов";
 }
+
+<!-- import the included stylesheet for some (very basic) default styling -->
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 
 <div style="text-align:center">
     <form method="get">
@@ -92,6 +97,20 @@
                                asp-route-creationDataTimeFilter="@(Model.FilterViewModel.SelectedCreationDateTime)">@Localizer["CreationDateTime"]</a>
                         </sort-header>
                     </th>
+                    <th>
+                    <a a asp-action="Index"
+   asp-route-page="@(Model.PageViewModel.PageNumber=1)"
+   asp-route-countryFilter="@(Model.NoFilterViewModel.SelectedCountry)"
+   asp-route-cityFilter="@(Model.NoFilterViewModel.SelectedCity)"
+   asp-route-streetFilter="@(Model.NoFilterViewModel.SelectedStreet)"
+   asp-route-houseNumberFilter="@(Model.NoFilterViewModel.SelectedHouseNumber)"
+   asp-route-zipCodeFilter="@(Model.NoFilterViewModel.SelectedZipCode)"
+   asp-route-creationDateTimeFilter="@(Model.NoFilterViewModel.SelectedCreationDateTime)"
+   asp-route-sortState="@(Model.SortViewModel.NoSort)"
+   class="btn btn-default btn">
+    @Localizer["Refresh"]
+    <i class="glyphicon glyphicon-refresh"></i>
+</a></th>
                 </tr>
                 <tr>
                     <td>@Html.TextBox("countryFilter", Model.FilterViewModel.SelectedCountry, htmlAttributes: new { @class = "form-control" })</td>
@@ -100,6 +119,7 @@
                     <td>@Html.TextBox("houseNumberFilter", Model.FilterViewModel.SelectedHouseNumber, htmlAttributes: new { @class = "form-control" })</td>
                     <td>@Html.TextBox("zipCodeFilter", Model.FilterViewModel.SelectedZipCode, htmlAttributes: new { @class = "form-control" })</td>
                     <td>@Html.TextBox("creationDataTimeFilter", Model.FilterViewModel.SelectedCreationDateTime, htmlAttributes: new { @class = "form-control" })</td>
+                    <td><input type="submit" value=@Localizer["Find"] class="btn btn-default" /></td>                
                 </tr>
 
 
@@ -115,58 +135,24 @@
             </tr>
         }
     </table>
-            <input type="submit" value="Фильтр" class="btn btn-default" @*style="visibility:hidden" *@ />
+            
             </div>
 </form>
 </div>
-@*@if (Model.PageViewModel.HasPreviousPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-countryFilter="@(Model.FilterViewModel.SelectedCountry)"
-       asp-route-cityFilter="@(Model.FilterViewModel.SelectedCity)"
-       asp-route-streetFilter="@(Model.FilterViewModel.SelectedStreet)"
-       asp-route-houseNumberFilter="@(Model.FilterViewModel.SelectedHouseNumber)"
-       asp-route-zipCodeFilter="@(Model.FilterViewModel.SelectedZipCode)"
-       asp-route-creationDateTimeFilter="@(Model.FilterViewModel.SelectedCreationDateTime)"
-       asp-route-sortState="@(Model.SortViewModel.Current)"
-       class="btn btn-default btn">
-       Назад
-        <i class="glyphicon glyphicon-chevron-left"></i>
-    </a>
-}
-@if (Model.PageViewModel.HasNextPage)
-{ 
-    <a asp-action = "Index"
-       asp-route-page = "@(Model.PageViewModel.PageNumber+1)"
-       asp-route-countryFilter = "@(Model.FilterViewModel.SelectedCountry)"
-       asp-route-cityFilter = "@(Model.FilterViewModel.SelectedCity)"
-       asp-route-streetFilter = "@(Model.FilterViewModel.SelectedStreet)"
-       asp-route-houseNumberFilter = "@(Model.FilterViewModel.SelectedHouseNumber)"
-       asp-route-zipCodeFilter = "@(Model.FilterViewModel.SelectedZipCode)"
-       asp-route-creationDateTimeFilter = "@(Model.FilterViewModel.SelectedCreationDateTime)"
-       asp-route-sortState = "@(Model.SortViewModel.Current)"
-       class="btn btn-default btn">
-       Вперед
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}*@
-<a a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber=1)"
-       asp-route-countryFilter="@(Model.NoFilterViewModel.SelectedCountry)"
-       asp-route-cityFilter="@(Model.NoFilterViewModel.SelectedCity)"
-       asp-route-streetFilter="@(Model.NoFilterViewModel.SelectedStreet)"
-       asp-route-houseNumberFilter="@(Model.NoFilterViewModel.SelectedHouseNumber)"
-       asp-route-zipCodeFilter="@(Model.NoFilterViewModel.SelectedZipCode)"
-       asp-route-creationDateTimeFilter="@(Model.NoFilterViewModel.SelectedCreationDateTime)"
-       asp-route-sortState="@(Model.SortViewModel.NoSort)"
-       class="btn btn-default btn">
-       @Localizer["Refresh"]
-        <i class="glyphicon glyphicon-refresh"></i>
-    </a>
-    @*Страница @(Model.PageViewModel.PageCount < Model.PageViewModel.PageNumber ? 0 : Model.PageViewModel.PageNumber) из @Model.PageViewModel.PageCount
 
-    <pager class="pager-container" list="@Model.Addresses" options="@PagedListRenderOptions.TwitterBootstrapPager" asp-action="Index" asp-controller="Home" asp-route-keyword="azaza" />*@
+
+
+@Html.PagedListPager((IPagedList)Model.Addresses,
+                       page => Url.Action("Index",
+                            new { page = page,
+                                countryFilter = @Model.FilterViewModel.SelectedCountry,
+                                cityFilter = @Model.FilterViewModel.SelectedCity,
+                                streetFilter = @Model.FilterViewModel.SelectedStreet,
+                                houseNumberFilter = @Model.FilterViewModel.SelectedHouseNumber,
+                                zipCodeFilter = @Model.FilterViewModel.SelectedZipCode,
+                                creationDateTimeFilter = @Model.FilterViewModel.SelectedCreationDateTime,
+                                sortState = @Model.SortViewModel.Name
+                            }))
 
 @if (Context.Features.Get<IRequestCultureFeature>().RequestCulture.UICulture.Name == "ru")
 {

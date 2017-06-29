@@ -126,6 +126,9 @@
   <data name="CreationDateTime" xml:space="preserve">
     <value>Creation Date Time</value>
   </data>
+  <data name="Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
   <data name="HouseNumber" xml:space="preserve">
     <value>House Number</value>
   </data>

@@ -126,11 +126,14 @@
   <data name="CreationDateTime" xml:space="preserve">
     <value>Дата создания</value>
   </data>
+  <data name="Find" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
   <data name="HouseNumber" xml:space="preserve">
     <value>Номер дома</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Сброс фильтра</value>
+    <value>Сброс</value>
   </data>
   <data name="Street" xml:space="preserve">
     <value>Улица</value>

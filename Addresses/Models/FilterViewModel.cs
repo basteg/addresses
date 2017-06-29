@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Addresses.Models
+﻿namespace Addresses.Models
 {
     public class FilterViewModel
     {
@@ -41,6 +36,5 @@ namespace Addresses.Models
         public string StyleTextHouseNumber { get; set; }
         public string StyleTextZipCode { get; set; }
         public string StyleTextCreationDateTime { get; set; }
-
     }
 }

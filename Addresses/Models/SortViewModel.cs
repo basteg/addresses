@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Addresses.Models;
-
-namespace Addresses.Models
+﻿namespace Addresses.Models
 {
     public class SortViewModel
     {
@@ -16,6 +10,7 @@ namespace Addresses.Models
         public SortState CreationDateTimeSort { get; set; }
         public SortState NoSort { get; set; }
         public SortState Current { get; set; }
+        public SortState Name { get; set; }
         public bool Up { get; set; }
 
 
@@ -30,10 +25,10 @@ namespace Addresses.Models
             Up = true;
             NoSort = SortState.NoSort;
 
-            if (sortState==SortState.CityDesc|| sortState==SortState.CountryDesc|| sortState==SortState.CreationDateTimeDesc|| sortState==SortState.HouseNumberDesc||sortState==SortState.StreetDesc|| sortState==SortState.ZipCodeDesc)
-            {
-                Up = false;
-            }
+            Up = sortState == SortState.CityAsc || sortState == SortState.CountryAsc
+              || sortState == SortState.CreationDateTimeDesc || sortState == SortState.HouseNumberDesc
+              || sortState == SortState.StreetDesc || sortState == SortState.ZipCodeDesc;
+            
             switch (sortState)
             {
                 case SortState.CityAsc:
@@ -76,6 +71,9 @@ namespace Addresses.Models
                     Current = NoSort = SortState.NoSort;
                     break;
             }
+
+            Name = sortState;
         }
+        
     }
 }
